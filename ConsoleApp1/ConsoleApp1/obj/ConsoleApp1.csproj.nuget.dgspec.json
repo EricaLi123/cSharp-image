@@ -40,6 +40,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "GrapeCity.Documents.Imaging": {
+              "target": "Package",
+              "version": "[5.2.0.803, )"
+            },
             "Imazen.WebP": {
               "target": "Package",
               "version": "[10.0.1, )"

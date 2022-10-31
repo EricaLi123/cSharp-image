@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "ConsoleApp1/1.0.0": {
         "dependencies": {
+          "Imazen.WebP": "10.0.1",
           "Svg": "3.4.3",
           "System.Drawing.Common": "6.0.0"
         },
@@ -28,6 +29,14 @@
           "lib/netstandard2.0/Fizzler.dll": {
             "assemblyVersion": "1.2.1.0",
             "fileVersion": "1.2.1.0"
+          }
+        }
+      },
+      "Imazen.WebP/10.0.1": {
+        "runtime": {
+          "lib/net45/Imazen.WebP.dll": {
+            "assemblyVersion": "10.0.1.0",
+            "fileVersion": "10.0.1.0"
           }
         }
       },
@@ -277,6 +286,13 @@
       "sha512": "sha512-nSudK8LeKSu7T/N/6NVZNjUniMYagfzVo8yT2XwZ9BOVbWYQH3EQ8oviuztJ7AfO8PlRDsYIWboZuzIg94hhzQ==",
       "path": "fizzler/1.2.1",
       "hashPath": "fizzler.1.2.1.nupkg.sha512"
+    },
+    "Imazen.WebP/10.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-V7IVaiI1lwY7hF3twONXF5zViuO00z2+U5QymL2cCS06VfHSESFPd+qzDWmcICEE5sgyR4l6MN+dEL7+JdxRMw==",
+      "path": "imazen.webp/10.0.1",
+      "hashPath": "imazen.webp.10.0.1.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
       "type": "package",

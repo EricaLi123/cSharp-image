@@ -37,3 +37,4 @@ D:\XAGIT\consoleApp1\ConsoleApp1\ConsoleApp1\bin\Debug\net6.0\runtimes\osx-x64\n
 D:\XAGIT\consoleApp1\ConsoleApp1\ConsoleApp1\bin\Debug\net6.0\runtimes\osx-x64\native\libpixman-1.0.dylib
 D:\XAGIT\consoleApp1\ConsoleApp1\ConsoleApp1\bin\Debug\net6.0\runtimes\osx-x64\native\libpng16.16.dylib
 D:\XAGIT\consoleApp1\ConsoleApp1\ConsoleApp1\bin\Debug\net6.0\runtimes\osx-x64\native\libtiff.5.dylib
+D:\XAGIT\consoleApp1\ConsoleApp1\ConsoleApp1\bin\Debug\net6.0\Imazen.WebP.dll

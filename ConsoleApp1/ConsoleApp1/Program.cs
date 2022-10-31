@@ -4,110 +4,11 @@ using System.Drawing.Imaging;
 using System.Net;
 using System.IO;
 using Svg;
+using ThumbImage;
 
-//Main.Img.test();
+//Test.Test.test_getThumbSizeOfImage();
 Test.Test.test_loadImage();
 
-class ImageSize{
-    public int width { get; set; }
-    public int height { get; set; }
-
-
-    public override bool Equals(object obj)
-    {
-        //
-        // See the full list of guidelines at
-        //   http://go.microsoft.com/fwlink/?LinkID=85237
-        // and also the guidance for operator== at
-        //   http://go.microsoft.com/fwlink/?LinkId=85238
-        //
-
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-
-        return (obj as ImageSize).width == this.width && (obj as ImageSize).height == this.height;
-    }
-    
-}
-namespace Main
-{
-
-
-    class Img
-    {
-
-
-        public static ImageSize GetThumbImageSize(ImageSize originalSize, ImageSize containerSize)
-        {
-            // 不需要缩
-            if (originalSize.width <= containerSize.width && originalSize.height < containerSize.height)
-            {
-                return originalSize;
-            }
-
-            // 等比例缩小
-            var width = 0;
-            var height = 0;
-            if (originalSize.width / originalSize.height > containerSize.width / containerSize.height)
-            {
-                width = containerSize.width;
-                height = width * originalSize.height / originalSize.width;
-            }
-            else
-            {
-                height = containerSize.height;
-                width = height * originalSize.width / originalSize.height;
-            }
-            return new ImageSize { width = width, height = height };
-        }
-
-        public static Stream readStream(string url)
-        {
-            var webReq = WebRequest.Create(url);
-            var webres = webReq.GetResponse();
-            return  webres.GetResponseStream();
-        }
-
-        public static Image loadLocalImage(string path)
-        {
-           return  Image.FromFile(path);
-
-        }
-
-        public static Image loadImage(string url)
-        {
-            var stream = readStream(url);
-            var img1 = Image.FromStream(stream);
-
-            return img1;
-
-        }
-
-        public static SvgDocument loadSvg(string url)
-        {
-            var stream = readStream(url);
-            return SvgDocument.Open<SvgDocument>(stream);
-        }
-
-        //public static Image loadWebP(string url)
-        //{
-        //    return;
-        //}
-
-        public static Image convertType(SvgDocument svg)
-        {
-            return svg.Draw();
-        }
-
-        public static Image getThumb(Image image, ImageSize size)
-        {
-            return image.GetThumbnailImage(size.width, size.height, () => false, IntPtr.Zero);
-        }
-    }
-
-}
 
 namespace Test
 {
@@ -135,6 +36,7 @@ namespace Test
             var caseList = new List<ThumbSizeCaseItem>();
 
             var inputContainerSize = new ImageSize { width = 100, height = 200 };
+
             //等宽,等高 => 不变
             caseList.Add(new ThumbSizeCaseItem
             {
@@ -200,12 +102,19 @@ namespace Test
                 inputContainerSize = inputContainerSize,
                 output = new ImageSize { width = 100, height = 200 },
             });
+            //小数
+            caseList.Add(new ThumbSizeCaseItem
+            {
+                inputOriginalSize = new ImageSize { width = 735, height = 385 },
+                inputContainerSize = inputContainerSize,
+                output = new ImageSize { width = 100, height = 52 },
+            });
 
 
             Console.WriteLine("============ GetThumbImageSize ==============");
             var wrongCase = caseList.Where(i =>
             {
-                var output = Main.Img.GetThumbImageSize(i.inputOriginalSize, i.inputContainerSize);
+                var output =ThumbImage.ThumbImage.GetThumbImageSize(i.inputOriginalSize, i.inputContainerSize);
 
                 var pass = output.Equals(i.output);
 
@@ -285,45 +194,29 @@ namespace Test
 
             var time = DateTime.Now;
 
-            var fileNamePre = String.Join('-', new[] {
-                    time.Hour.ToString().PadLeft(2,'0'),
-                    time.Minute.ToString().PadLeft(2,'0'),
-                    time.Second.ToString().PadLeft(2,'0'),
-                    time.Millisecond.ToString().PadLeft(3,'0'),  });
             imgUrls.ForEach(i =>
             {
                 var index = imgUrls.IndexOf(i);
 
-                var fileName = fileNamePre + "_" + index +"_"+i.type;
+                var fileName = index + "_" + i.type;
                 var path = dire + fileName;
-                try
+
+                var thumb = ThumbImage.ThumbImage.getThumb(i.url);
+
+                if (thumb != null)
                 {
-                    var res = Main.Img.loadImage(i.url);
-                    res.Save(path+"."+res.RawFormat);
 
-                    Console.WriteLine("LoadImage : " + index + '.' + i.type+"  => "+ res.RawFormat);
-                    return;                   
-                } catch (Exception e)
+                    //thumb.Save(path + "." + thumb.RawFormat);
+                    thumb.Save(path  ,ImageFormat.Jpeg);
+                    Console.WriteLine(index + '.' + i.type + "  => " + thumb.RawFormat + "       " + new ImageSize(thumb));
+                }
+                else
                 {
+                    Console.WriteLine("==============================================failed: " + i.url + " " + i.url);
                 }
-
-                try
-                {
-                    var res = Main.Img.convertType(Main.Img.loadSvg(i.url));
-                    res.Save(path + "." + res.RawFormat);
-
-                    //var img = Main.Img.loadLocalImage(dire + "svg__" + fileName+ ".jpg");
-                    Console.WriteLine("LoadSvg: " + index + '.' + i.type + " =>  " + res.RawFormat);
-                    return;
-                }
-                catch (Exception e)
-                { 
-                }
-
-
-                Console.WriteLine("==============================================failed: " + index + i.type);
             });
         }
+
     }
 
 }
